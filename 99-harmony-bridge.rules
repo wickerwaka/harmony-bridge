@@ -1,0 +1,7 @@
+ACTION=="add",\
+  SUBSYSTEMS=="input", KERNEL=="event[0-9]*",\
+  ATTRS{name}=="Harmony Keyboard",\
+  TAG+="systemd",\
+  PROGRAM="/bin/systemd-escape -p --template=harmony-bridge@.service $env{DEVNAME}",\
+  ENV{SYSTEMD_WANTS}+="%c"
+
