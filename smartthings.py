@@ -4,11 +4,11 @@ import requests
 import time
 
 class SmartThings:
-    def __init__(self, host, app_id, access_token):
-        self.host = host
+    def __init__(self, base_url, app_id, access_token):
+        self.base_url = base_url
         self.app_id = app_id
         self.access_token = access_token
-        self.url = "https://%s/api/smartapps/installations/%s/" % (self.host, self.app_id)
+        self.url = "%s/api/smartapps/installations/%s/" % (self.base_url, self.app_id)
         self.session = requests.Session()
         self.update()
 
@@ -72,5 +72,13 @@ class SmartThings:
             r.raise_for_status()
         except requests.HTTPError, e:
             print "Could not complete request: ", e
+
+    """ Handler methods """
+    @classmethod
+    def from_config(cls, initdata):
+        return cls(initdata['base_url'], initdata['app_id'], initdata['access_token'])
+    
+    def handle(self, data):
+        return self.command(data.get('name_or_id', ''), data.get('command', 'on'), data.get('value', None))
 
 

@@ -67,15 +67,11 @@ def copyConfig() {
 
 def renderConfig() {
     def configJson = new groovy.json.JsonOutput().toJson([
-        description: "JSON API",
-        platforms: [
-            [
-                platform: "SmartThings",
-                name: "SmartThings",
-                app_id:        app.id,
-                access_token:  state.accessToken
-            ]
-        ],
+        smartthings: [
+            base_url:      getApiServerUrl(),
+            app_id:        app.id,
+            access_token:  state.accessToken
+        ]
     ])
 
     def configString = new groovy.json.JsonOutput().prettyPrint(configJson)
@@ -135,6 +131,3 @@ mappings {
     path("/:type/:id/command/:command")   { action: [PUT: "deviceCommand"] }
 }
 
-def authError() {
-    [error: "Permission denied"]
-}

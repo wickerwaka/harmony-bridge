@@ -15,17 +15,25 @@ def read_config(name):
         sys.exit(2)
     return j
 
+handler_cls = {
+    'smartthings': smartthings.SmartThings
+}
+
+handlers = {}
+
 if len(sys.argv) != 3:
     print "Usage: %s <config> <device>" % (sys.argv[0], )
     sys.exit(1)
 
 config = read_config(sys.argv[1])
-st = None
 
-if 'smartthings' in config:
-    print "Initializing SmartThings"
-    cfg = config['smartthings']
-    st = smartthings.SmartThings(cfg['host'], cfg['appid'], cfg['token'])
+for name, initdata in config.get('handlers', {}).items():
+    if name not in handler_cls:
+        print "Could not initialize unregistered handler '%s'" % (name,)
+        continue
+
+    print "Initializing handler '%s'" % (name,)
+    handlers[name] = handler_cls[name].from_config(initdata)
 
 device_name = sys.argv[2]
 
@@ -39,7 +47,8 @@ for event in dev.read_loop():
             bindingkey = binding.get('key', '')
             if bindingkey != keyname:
                 continue
-            if st and binding.get('handler', '') == 'smartthings':
-                p = binding.get('parameters', {})
-                st.command(p.get('name_or_id', ''), p.get('command', 'on'), p.get('value', None))
+
+            handler_name = binding.get('handler', None)
+            if handler_name in handlers:
+                handlers[handler_name].handle(binding.get('parameters', {}))
 

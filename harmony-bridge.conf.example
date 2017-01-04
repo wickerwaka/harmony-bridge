@@ -1,0 +1,47 @@
+{
+	"handlers": {
+		"smartthings": {
+			"base_url": "https://graph-na02-useast1.api.smartthings.com:443",
+			"app_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+			"access_token": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+		}
+	},
+	"bindings": [
+		{
+			"key": "KEY_F1",
+			"handler": "smartthings",
+			"parameters": {
+				"name_or_id": "Den Overheads",
+				"command": "setLevel",
+				"value": 10
+			}
+		},
+		{
+			"key": "KEY_F2",
+			"handler": "smartthings",
+			"parameters": {
+				"name_or_id": "Den Overheads",
+				"command": "setLevel",
+				"value": 40
+			}
+		},
+		{
+			"key": "KEY_F3",
+			"handler": "smartthings",
+			"parameters": {
+				"name_or_id": "Den Overheads",
+				"command": "setLevel",
+				"value": 99
+			}
+		},
+		{
+			"key": "KEY_F4",
+			"handler": "smartthings",
+			"parameters": {
+				"name_or_id": "Den Overheads",
+				"command": "off"
+			}
+		}
+	]
+}
+

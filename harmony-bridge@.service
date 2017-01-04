@@ -4,7 +4,7 @@ BindTo=%i.device
 After=%i.device
 
 [Service]
-ExecStart=/opt/harmony-bridge/service.py %I
+ExecStart=/opt/harmony-bridge/service.py /opt/harmony-bridge/harmony-bridge.conf %I
 Restart=always
 RestartSec=5
 
