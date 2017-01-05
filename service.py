@@ -4,7 +4,20 @@ from evdev import InputDevice, ecodes
 import sys
 import json
 
+######
+# Handlers
 import smartthings
+import http
+
+handler_cls = {
+    'smartthings': smartthings.SmartThings,
+    'http': http.Requester
+}
+
+handlers = {}
+
+######
+
 
 def read_config(name):
     try:
@@ -14,12 +27,6 @@ def read_config(name):
         print "Could not load config '%s': %s" % (name, e)
         sys.exit(2)
     return j
-
-handler_cls = {
-    'smartthings': smartthings.SmartThings
-}
-
-handlers = {}
 
 if len(sys.argv) != 3:
     print "Usage: %s <config> <device>" % (sys.argv[0], )
@@ -50,5 +57,8 @@ for event in dev.read_loop():
 
             handler_name = binding.get('handler', None)
             if handler_name in handlers:
+                print "Running handler '%s' for keypress '%s'" % (handler_name, keyname)
                 handlers[handler_name].handle(binding.get('parameters', {}))
+            else:
+                print "Could not find handler '%s' for keypress '%s'" % (handler_name, keyname)
 
