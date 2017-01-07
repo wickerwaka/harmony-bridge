@@ -1,10 +1,10 @@
 [Unit]
-Description=Harmony Bridge on %I
+Description=Harmony Bridge on /%I
 BindTo=%i.device
 After=%i.device
 
 [Service]
-ExecStart=/opt/harmony-bridge/service.py /opt/harmony-bridge/harmony-bridge.conf %I
+ExecStart=/opt/harmony-bridge/service.py /opt/harmony-bridge/harmony-bridge.conf /%I
 Restart=always
 RestartSec=5
 
