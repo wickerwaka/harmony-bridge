@@ -38,6 +38,12 @@ Eventually a "Harmony Keyboard" device will appear in the device scan list. Copy
 
 That's it. The keyboard is now paired and will connect automatically whenever it is present.
 
+## Configuration
+The `harmony-bridge.conf.example` shows the basics of the configuration options, rename/copy it to `harmony-bridge.conf` and make some changes. It is a JSON format file split into two main sections. The `handlers` object specifies options for the key event handlers. There are currently two: `http` and `smartthings`. The `http` handler takes no options while the `smartthings` handler is has some specific options that are explained later.
+
+The `bindings` array contains the keys that trigger each action. Parameters can be passed to each handler. For the `http` handler the parameters are passed directly to a `requests.request` call, `method` and `url` need to be provided at a minimum. For the `smartthings` handler you need to provide a device `name_or_id` and a `command`. Some commands (such as a dimmer `setLevel`) take a `value` parameter.
+
+
 ## udev and systemd
 
 The `service.py` script listens for events from a keyboard input device and performs actions based on that. We want this script to start up whenever we detect the Harmony keyboard device. We will do this my using a udev rule that starts a systemd service whenever a new `/dev/input/event*` device is added.
@@ -48,5 +54,6 @@ From `/opt/harmony-bridge` run
     sudo ln -sr 99-harmony-bridge.rules /etc/udev/rules.d/
     
 
+## SmartThings Integration
 
-
+In order to easily control SmartThings connected devices (my main reason for doing this) you need to install a smart app that exposes an HTTP endpoint. The `JSON.groovy` file in this repository is a slightly modified version of a similar smart app created by Jesse Newland (https://github.com/jnewland/SmartThings). You will need to import this code into the smartthings IDE, enable OAuth and publish it. Then you can add the smartapp using the SmartThings mobile app and configure what devices you want to expose. Once configured you can select the "Config" option in the smartapp which will display the configuration data that you should add to the `smartthings` section of the `harmony-bridge.conf`. You should treat the `access_token` and `app_id` as private data. If someone has access to those values they will also be able to control your devices!
